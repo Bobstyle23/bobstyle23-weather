@@ -1,0 +1,23 @@
+.primary-button {
+  @extend %text-preset-5-md;
+  padding-block: $spacing-16;
+  padding-inline: $spacing-24;
+  min-width: 11.4rem;
+  min-height: 5.6rem;
+  background-color: $color-blue-500;
+  color: $color-white;
+  border-radius: $radius-12;
+  transition: all 0.25s ease;
+
+  margin: 2rem;
+
+  &:hover {
+    background-color: $color-blue-700;
+  }
+
+  &:focus {
+    box-shadow:
+      0 0 0 3px $color-neutral-900,
+      0 0 0 5px $color-blue-500;
+  }
+}

@@ -8,7 +8,20 @@
   </head>
   <body>
     <div class="container">
-      <h1>hello</h1>
+
+      <button type="button" class="primary-button">Search</button>
+      <form class="search">
+        <svg class="search__icon">
+          <use href="./img/svgsprite/sprite.symbol.svg#icon-search"></use>
+        </svg>
+        <input
+          type="text"
+          name="search"
+          value=""
+          placeholder="Search for a place..."
+          class="search__field"
+        />
+      </form>
     </div>
     <script src="./js/index.bundle.js"></script>
   </body>

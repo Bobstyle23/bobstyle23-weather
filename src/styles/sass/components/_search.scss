@@ -1,0 +1,59 @@
+.search {
+  position: relative;
+  width: 100%;
+
+  &__icon {
+    position: absolute;
+    left: $spacing-24;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    width: 2rem;
+    height: 2rem;
+    fill: $color-neutral-200;
+  }
+
+  &__field {
+    width: 100%;
+    min-height: 5.6rem;
+    border: none;
+    padding-block: $spacing-16;
+    padding-inline-start: calc($spacing-24 + 3.6rem);
+    padding-inline-end: $spacing-24;
+    border-radius: $radius-12;
+    background-color: $color-neutral-800;
+    @extend %text-preset-5-md;
+    transition: all 0.25s ease;
+    caret-color: $color-neutral-200;
+    color: $color-white;
+    outline: none;
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0px 1000px $color-neutral-800 inset !important;
+      -webkit-text-fill-color: $color-white !important;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+
+    &::placeholder {
+      color: $color-neutral-200;
+    }
+
+    &:hover {
+      cursor: pointer;
+      background-color: $color-neutral-700;
+    }
+
+    &:focus,
+    &:focus-visible {
+      box-shadow:
+        0 0 0 3px $color-neutral-900,
+        0 0 0 5px $color-white;
+    }
+
+    &:-webkit-autofill {
+      background-color: red;
+    }
+  }
+}
