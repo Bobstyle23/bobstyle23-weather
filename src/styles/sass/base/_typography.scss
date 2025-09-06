@@ -1,0 +1,37 @@
+%text-preset-1 {
+  @include typography(9.6rem, 600, $spacing: -0.2rem);
+  font-style: italic;
+}
+
+%text-preset-2 {
+  @include typography(5.2rem, 700);
+  font-family: BricolageGrotesque, sans-serif;
+}
+
+%text-preset-3 {
+  @include typography(3.2rem, 300);
+}
+
+%text-preset-4 {
+  @include typography(2.8rem, 700, 1.2);
+}
+
+%text-preset-5 {
+  @include typography(2rem, 600, 1.2);
+}
+
+%text-preset-5-md {
+  @include typography(2rem, 500, 1.2);
+}
+
+%text-preset-6 {
+  @include typography(1.8rem, 500, 1.2);
+}
+
+%text-preset-7 {
+  @include typography(1.6rem, 500, 1.2);
+}
+
+%text-preset-8 {
+  @include typography(1.4rem, 500, 1.2);
+}

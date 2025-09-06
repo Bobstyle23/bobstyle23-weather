@@ -25,6 +25,10 @@ body {
   @include containerWidth(144rem);
 }
 
+h1 {
+  @extend %text-preset-5-md;
+}
+
 h1,
 h2,
 h3,
