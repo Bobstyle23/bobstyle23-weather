@@ -4,6 +4,20 @@
 
 .container {
   @include containerWidth(121.6rem);
+  margin-block-start: $spacing-16;
+  margin-inline: $spacing-16;
+  margin-block-end: $spacing-48;
+
+  @include respond-to($breakpoint-tablets) {
+    margin-block-start: $spacing-24;
+    margin-inline: $spacing-24;
+    margin-block-end: $spacing-80;
+  }
+
+  @include respond-to($breakpoint-desktops) {
+    margin-inline: auto;
+    margin-block-start: $spacing-48;
+  }
 }
 
 .select {
@@ -93,10 +107,3 @@
     }
   }
 }
-
-/* .arrow { */
-/*   fill: $color-white; */
-/*   width: 1.2rem; */
-/*   height: 1.8rem; */
-/*   transition: all 0.35s ease; */
-/* } */
