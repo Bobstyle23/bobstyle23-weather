@@ -22,10 +22,10 @@ const config = {
   entry: generateEntryPoints(),
 
   // PERF: for a reference
-  // entry: {
-  //   index: "./src/js/index.js",
-  //   contacts: "./src/js/contacts.js",
-  // },
+  entry: {
+    index: "./src/js/index.js",
+    dropdown: "./src/js/dropdown.js",
+  },
   output: {
     filename: "[name].bundle.js",
   },

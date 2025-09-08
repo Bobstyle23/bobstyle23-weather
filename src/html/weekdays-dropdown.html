@@ -1,0 +1,31 @@
+<div class="select">
+  <button
+    id="dropdown-button"
+    class="select__button"
+    role="combobox"
+    aria-label="select button"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-controls="select__dropdown"
+  >
+    <span class="selected__value"></span>
+    <svg class="select__icon select__icon--arrow">
+      <use href="./img/svgsprite/sprite.symbol.svg#icon-dropdown"></use>
+    </svg>
+  </button>
+  <ul
+    class="select__dropdown weekdays hidden"
+    role="listbox"
+    id="select__dropdown"
+    aria-labelledby="dropdown-button"
+  >
+    <li role="option">Monday</li>
+    <li role="option">Tuesday</li>
+    <li role="option">Wednesday</li>
+    <li role="option">Thursday</li>
+    <li role="option">Friday</li>
+    <li role="option">Saturday</li>
+    <li role="option">Sunday</li>
+  </ul>
+</div>
+<script src="./js/dropdown.bundle.js"></script>
