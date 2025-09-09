@@ -15,10 +15,7 @@
     column-gap: $spacing-16;
 
     @include respond-to($breakpoint-tablets) {
-      grid-template-columns: repeat(
-        auto-fill,
-        minmax(min(8.914rem, 100%), 1fr)
-      );
+      grid-template-columns: repeat(auto-fit, minmax(min(8.914rem, 100%), 1fr));
     }
 
     @include respond-to($breakpoint-desktops) {
@@ -48,6 +45,10 @@
     border-radius: $radius-8;
     @extend %flexbox;
     gap: $spacing-16;
+
+    @include respond-to($breakpoint-tablets) {
+      padding: $spacing-24;
+    }
   }
 
   &__header {
