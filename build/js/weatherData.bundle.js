@@ -1,0 +1,1 @@
+(()=>{const t=new WeakMap;new WeakMap,(new class{constructor(t){this.location=t}set locationData(a){t.set(this,a)}get locationData(){t.get(this)}async fetchLocationData(t){const a=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${t}`),o=await a.json();return this.locationData=o,o}}).fetchLocationData("tashkent").then(t=>{console.log(t)})})();
