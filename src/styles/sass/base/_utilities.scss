@@ -14,7 +14,7 @@
     margin-block-end: $spacing-80;
   }
 
-  @include respond-to($breakpoint-desktops) {
+  @include respond-to("(min-width: 78.125em)") {
     margin-inline: auto;
     margin-block-start: $spacing-48;
   }

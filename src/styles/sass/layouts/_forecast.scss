@@ -37,6 +37,12 @@
     border-radius: $radius-12;
   }
 
+  &--daily {
+    @include respond-to($breakpoint-desktops) {
+      grid-row: 3;
+    }
+  }
+
   &--hourly {
     width: 100%;
     background-color: $color-neutral-800;
@@ -48,6 +54,10 @@
 
     @include respond-to($breakpoint-tablets) {
       padding: $spacing-24;
+    }
+
+    @include respond-to($breakpoint-desktops) {
+      grid-area: 2 / 2 / span 2 / -1;
     }
   }
 

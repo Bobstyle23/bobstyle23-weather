@@ -11,6 +11,7 @@
   @include respond-to($breakpoint-large-tablets) {
     max-width: 66rem;
     justify-self: center;
+    grid-column: 1 / -1;
   }
 }
 

@@ -18,4 +18,10 @@
 .main {
   @extend %grid;
   row-gap: $spacing-32;
+
+  @include respond-to($breakpoint-desktops) {
+    grid-template-columns: auto 1fr;
+    column-gap: $spacing-32;
+    row-gap: $spacing-48;
+  }
 }
