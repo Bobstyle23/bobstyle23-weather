@@ -1,0 +1,38 @@
+<section class="forecast forecast--hourly">
+  <header class="forecast__header">
+    <h3 class="forecast__title">Hourly forecast</h3>
+    <div class="select" data-default="Monday" data-type="days">
+  <button
+    id="dropdown-button"
+    class="select__button"
+    role="combobox"
+    aria-expanded="false"
+  >
+    <span class="selected__value"></span>
+    <svg class="select__icon select__icon--arrow">
+      <use href="./img/svgsprite/sprite.symbol.svg#icon-dropdown"></use>
+    </svg>
+  </button>
+  <ul class="select__dropdown hidden" role="listbox">
+    <li role="option">Monday</li>
+    <li role="option">Tuesday</li>
+    <li role="option">Wednesday</li>
+    <li role="option">Thursday</li>
+    <li role="option">Friday</li>
+    <li role="option">Saturday</li>
+    <li role="option">Sunday</li>
+  </ul>
+</div>
+
+  </header>
+  <div class="forecast__units forecast__units--hourly">
+    <article class="forecast__unit forecast__unit--hourly"></article>
+    <article class="forecast__unit forecast__unit--hourly"></article>
+    <article class="forecast__unit forecast__unit--hourly"></article>
+    <article class="forecast__unit forecast__unit--hourly"></article>
+    <article class="forecast__unit forecast__unit--hourly"></article>
+    <article class="forecast__unit forecast__unit--hourly"></article>
+    <article class="forecast__unit forecast__unit--hourly"></article>
+    <article class="forecast__unit forecast__unit--hourly"></article>
+  </div>
+</section>
