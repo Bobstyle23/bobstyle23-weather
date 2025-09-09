@@ -9,23 +9,64 @@
   <body>
     <div class="container">
 
-      <section class="search__container">
-  <form class="search">
-    <svg class="search__icon">
-      <use href="./img/svgsprite/sprite.symbol.svg#icon-search"></use>
+      <div class="select" data-default="Monday" data-type="days">
+  <button
+    id="dropdown-button"
+    class="select__button"
+    role="combobox"
+    aria-expanded="false"
+  >
+    <span class="selected__value"></span>
+    <svg class="select__icon select__icon--arrow">
+      <use href="./img/svgsprite/sprite.symbol.svg#icon-dropdown"></use>
     </svg>
-    <input
-      type="text"
-      name="search"
-      value=""
-      placeholder="Search for a place..."
-      class="search__field"
-    />
-  </form>
-  <button type="button" class="primary-button">Search</button>
-</section>
+  </button>
+  <ul class="select__dropdown hidden" role="listbox">
+    <li role="option">Monday</li>
+    <li role="option">Tuesday</li>
+    <li role="option">Wednesday</li>
+    <li role="option">Thursday</li>
+    <li role="option">Friday</li>
+    <li role="option">Saturday</li>
+    <li role="option">Sunday</li>
+  </ul>
+</div>
+ <div class="select" data-type="units" data-default="Units">
+  <button class="select__button" role="combobox" aria-expanded="false">
+    <svg class="select__icon select__icon--unit">
+      <use href="./img/svgsprite/sprite.symbol.svg#icon-units"></use>
+    </svg>
+    <span class="selected__value"></span>
+    <svg class="select__icon select__icon--arrow">
+      <use href="./img/svgsprite/sprite.symbol.svg#icon-dropdown"></use>
+    </svg>
+  </button>
+  <ul class="select__dropdown hidden" role="listbox">
+    <button class="switch">Switch to&#160;Imperial</button>
+    <span class="division">Temperature</span>
+    <li role="option">
+      Celcius
+      <span
+        ><svg class="select__icon select__icon--check">
+          <use href="./img/svgsprite/sprite.symbol.svg#icon-checkmark"></use>
+        </svg>
+      </span>
+    </li>
+    <li role="option">Fahrenheit</li>
+    <span class="divider"></span>
+    <span class="division">Wind Speed</span>
+    <li role="option">km/h</li>
+    <li role="option">mph</li>
+    <span class="divider"></span>
+    <span class="division">Precipation</span>
+    <li role="option">Millimeters (mm)</li>
+    <li role="option">Inches (in)</li>
+  </ul>
+</div>
 
     </div>
+    <script src="./js/dropdown.bundle.js"></script>
+
     <script src="./js/index.bundle.js"></script>
   </body>
 </html>
