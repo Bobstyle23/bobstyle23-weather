@@ -1,0 +1,16 @@
+.header {
+  @extend %flexbox;
+  gap: $spacing-48;
+  margin-block-end: $spacing-48;
+
+  @include respond-to($breakpoint-large-tablets) {
+    gap: $spacing-64;
+    margin-block-end: $spacing-64;
+  }
+
+  &__title {
+    @extend %text-preset-2;
+    color: $color-white;
+    text-align: center;
+  }
+}

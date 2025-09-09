@@ -7,7 +7,13 @@
     <title>Main page</title>
   </head>
   <body>
-    <div class="container">@@include("./navigation.html")</div>
+    <div class="container">
+      <header class="header">
+        @@include("./navigation.html")
+        <h1 class="header__title">How's the sky looking today?</h1>
+      </header>
+      <main class="main">@@include("./search.html")</main>
+    </div>
     <script src="./js/dropdown.bundle.js"></script>
     <script src="./js/index.bundle.js"></script>
   </body>

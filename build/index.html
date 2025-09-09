@@ -7,7 +7,9 @@
     <title>Main page</title>
   </head>
   <body>
-    <div class="container"><nav class="navigation">
+    <div class="container">
+      <header class="header">
+        <nav class="navigation">
   <a href="./index.html">
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +72,26 @@
 </div>
 
 </nav>
-</div>
+
+        <h1 class="header__title">How&#8217;s the sky looking today?</h1>
+      </header>
+      <main class="main"><section class="search__container">
+  <form class="search">
+    <svg class="search__icon">
+      <use href="./img/svgsprite/sprite.symbol.svg#icon-search"></use>
+    </svg>
+    <input
+      type="text"
+      name="search"
+      value=""
+      placeholder="Search for a place..."
+      class="search__field"
+    />
+  </form>
+  <button type="button" class="primary-button">Search</button>
+</section>
+</main>
+    </div>
     <script src="./js/dropdown.bundle.js"></script>
     <script src="./js/index.bundle.js"></script>
   </body>
