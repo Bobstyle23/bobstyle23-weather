@@ -75,7 +75,8 @@
 
         <h1 class="header__title">How&#8217;s the sky looking today?</h1>
       </header>
-      <main class="main"><section class="search__container">
+      <main class="main">
+        <section class="search__container">
   <form class="search">
     <svg class="search__icon">
       <use href="./img/svgsprite/sprite.symbol.svg#icon-search"></use>
@@ -90,8 +91,28 @@
   </form>
   <button type="button" class="primary-button">Search</button>
 </section>
-</main>
+ <section class="current">
+  <picture class="current__bg-img">
+    <source
+      srcset="./img/svgicons/bg-today-large.svg"
+      type="image/svg+xml"
+      media="(min-width: 48em)"
+    />
+    <img src="./img/svgicons/bg-today-small.svg" alt="" />
+  </picture>
+  <div class="current__units">
+    <article class="current__unit current__unit--feels-like"></article>
+    <article class="current__unit current__unit--humidity"></article>
+    <article class="current__unit current__unit--wind"></article>
+    <article class="current__unit current__unit--precipitation"></article>
+  </div>
+</section>
+
+        <section class="forecast forecast--daily"></section>
+        <section class="forecast forecast--hourly"></section>
+      </main>
     </div>
+    <script src="./js/weatherData.bundle.js"></script>
     <script src="./js/dropdown.bundle.js"></script>
     <script src="./js/index.bundle.js"></script>
   </body>

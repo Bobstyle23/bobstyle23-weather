@@ -1,6 +1,7 @@
 .search__container {
   @extend %grid;
   row-gap: $spacing-12;
+  width: 100%;
 
   @include respond-to($breakpoint-tablets) {
     grid-template-columns: 1fr auto;
@@ -9,7 +10,7 @@
 
   @include respond-to($breakpoint-large-tablets) {
     max-width: 66rem;
-    margin-inline: auto;
+    justify-self: center;
   }
 }
 

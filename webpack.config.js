@@ -25,6 +25,7 @@ const config = {
   entry: {
     index: "./src/js/index.js",
     dropdown: "./src/js/dropdown.js",
+    weatherData: "./src/js/weather-data.js",
   },
   output: {
     filename: "[name].bundle.js",

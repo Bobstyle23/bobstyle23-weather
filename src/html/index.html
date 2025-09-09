@@ -12,8 +12,13 @@
         @@include("./navigation.html")
         <h1 class="header__title">How's the sky looking today?</h1>
       </header>
-      <main class="main">@@include("./search.html")</main>
+      <main class="main">
+        @@include("./search.html") @@include("./current-weather.html")
+        <section class="forecast forecast--daily"></section>
+        <section class="forecast forecast--hourly"></section>
+      </main>
     </div>
+    <script src="./js/weatherData.bundle.js"></script>
     <script src="./js/dropdown.bundle.js"></script>
     <script src="./js/index.bundle.js"></script>
   </body>

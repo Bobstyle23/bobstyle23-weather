@@ -1,0 +1,36 @@
+.current {
+  @extend %flexbox;
+  flex-flow: column nowrap;
+  gap: $spacing-20;
+
+  @include respond-to($breakpoint-large-tablets) {
+    gap: $spacing-32;
+  }
+
+  &__units {
+    @extend %grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(16.35rem, 100%), 1fr));
+    row-gap: $spacing-16;
+    column-gap: $spacing-16;
+
+    @include respond-to($breakpoint-tablets) {
+      column-gap: $spacing-20;
+    }
+
+    @include respond-to($breakpoint-large-tablets) {
+      column-gap: $spacing-24;
+    }
+  }
+
+  &__unit {
+    @extend %flexbox;
+    flex-flow: column nowrap;
+    gap: $spacing-24;
+    background-color: $color-neutral-800;
+    box-shadow: inset 0 0 0 1px $color-neutral-600;
+    min-height: 11.8rem;
+    width: auto;
+    border-radius: $radius-12;
+    padding: $spacing-20;
+  }
+}

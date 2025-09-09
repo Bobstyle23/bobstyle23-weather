@@ -62,6 +62,7 @@
       inset 0 0 0 1px $color-neutral-600,
       0 8px 16px 0 rgba($color: #02012c, $alpha: 0.32);
 
+    z-index: 1;
     &.hidden {
       display: none;
     }
