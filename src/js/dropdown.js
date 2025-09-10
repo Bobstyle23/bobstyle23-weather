@@ -25,10 +25,11 @@ Dropdown.prototype.init = function () {
   });
 
   this.button.addEventListener("click", () => this.toggle());
-  // this.button.addEventListener("keydown", (e) => this.handleDropdownKeydown(e));
-  // this.dropdown.addEventListener("keydown", (e) =>
-  //   this.handleDropdownKeydown(e),
-  // );
+  // PERF: keyboard events
+  this.button.addEventListener("keydown", (e) => this.handleDropdownKeydown(e));
+  this.dropdown.addEventListener("keydown", (e) =>
+    this.handleDropdownKeydown(e),
+  );
 
   document.addEventListener("click", (e) => {
     if (!this.root.contains(e.target)) this.toggle(false);
@@ -72,7 +73,6 @@ Dropdown.prototype.selectOption = function (option) {
 
     this.selectedValue.textContent = "Units";
     this.selectedOptions = groupedSelections;
-    console.log(groupedSelections);
   } else {
     this.options.forEach((o) => o.classList.remove("selected"));
     option.classList.add("selected");
@@ -88,32 +88,33 @@ Dropdown.prototype.updateFocus = function () {
   });
 };
 
-// Dropdown.prototype.handleButtonKeydown = function (event) {
-//   if (event.key === "ArrowDown") {
-//     event.preventDefault();
-//     this.toggle(true);
-//   } else if (event.key === "Escape") {
-//     this.toggle(false);
-//   }
-// };
-//
-// Dropdown.prototype.handleDropdownKeydown = function (event) {
-//   if (event.key === "ArrowDown") {
-//     event.preventDefault();
-//     this.focusedIndex = (this.focusedIndex + 1) % this.options.length;
-//     this.updateFocus();
-//   } else if (event.key === "ArrowUp") {
-//     event.preventDefault();
-//     this.focusedIndex =
-//       (this.focusedIndex - 1 + this.options.length) % this.options.length;
-//     this.updateFocus();
-//   } else if (event.key === "Enter" || event.key === " ") {
-//     event.preventDefault();
-//     this.selectOption(this.options[this.focusedIndex]);
-//     this.toggle(false);
-//   } else if (event.key === "Escape") {
-//     this.toggle(false);
-//   }
-// };
+// PERF: keyboard handlers
+Dropdown.prototype.handleButtonKeydown = function (event) {
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    this.toggle(true);
+  } else if (event.key === "Escape") {
+    this.toggle(false);
+  }
+};
+
+Dropdown.prototype.handleDropdownKeydown = function (event) {
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    this.focusedIndex = (this.focusedIndex + 1) % this.options.length;
+    this.updateFocus();
+  } else if (event.key === "ArrowUp") {
+    event.preventDefault();
+    this.focusedIndex =
+      (this.focusedIndex - 1 + this.options.length) % this.options.length;
+    this.updateFocus();
+  } else if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    this.selectOption(this.options[this.focusedIndex]);
+    this.toggle(false);
+  } else if (event.key === "Escape") {
+    this.toggle(false);
+  }
+};
 
 document.querySelectorAll(".select").forEach((root) => new Dropdown(root));
