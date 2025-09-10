@@ -11,22 +11,57 @@
   <ul class="select__dropdown hidden" role="listbox">
     <button class="switch">Switch to&#160;Imperial</button>
     <span class="division">Temperature</span>
-    <li role="option">
+    <li role="option" data-value="celsius" data-group="temperature">
       Celsius (&#176;C)
-      <span
-        ><svg class="select__icon select__icon--check">
+      <span>
+        <svg class="select__icon select__icon--check">
           <use href="./img/svgsprite/sprite.symbol.svg#icon-checkmark"></use>
         </svg>
       </span>
     </li>
-    <li role="option">Fahrenheit (&#176;F)</li>
+    <li role="option" data-value="fahrenheit" data-group="temperature">
+      Fahrenheit (&#176;F)
+      <span>
+        <svg class="select__icon select__icon--check">
+          <use href="./img/svgsprite/sprite.symbol.svg#icon-checkmark"></use>
+        </svg>
+      </span>
+    </li>
     <span class="divider"></span>
     <span class="division">Wind Speed</span>
-    <li role="option">km/h</li>
-    <li role="option">mph</li>
+    <li role="option" data-value="kmh" data-group="wind-speed">
+      km/h
+      <span>
+        <svg class="select__icon select__icon--check">
+          <use href="./img/svgsprite/sprite.symbol.svg#icon-checkmark"></use>
+        </svg>
+      </span>
+    </li>
+    <li role="option" data-value="mph" data-group="wind-speed">
+      mph
+      <span>
+        <svg class="select__icon select__icon--check">
+          <use href="./img/svgsprite/sprite.symbol.svg#icon-checkmark"></use>
+        </svg>
+      </span>
+    </li>
     <span class="divider"></span>
-    <span class="division">Precipation</span>
-    <li role="option">Millimeters (mm)</li>
-    <li role="option">Inches (in)</li>
+    <span class="division">Precipitation</span>
+    <li role="option" data-value="mm" data-group="precipitation">
+      Millimeters (mm)
+      <span>
+        <svg class="select__icon select__icon--check">
+          <use href="./img/svgsprite/sprite.symbol.svg#icon-checkmark"></use>
+        </svg>
+      </span>
+    </li>
+    <li role="option" data-value="inches" data-group="precipitation">
+      Inches (in)
+      <span>
+        <svg class="select__icon select__icon--check">
+          <use href="./img/svgsprite/sprite.symbol.svg#icon-checkmark"></use>
+        </svg>
+      </span>
+    </li>
   </ul>
 </div>

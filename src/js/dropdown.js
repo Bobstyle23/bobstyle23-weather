@@ -25,10 +25,10 @@ Dropdown.prototype.init = function () {
   });
 
   this.button.addEventListener("click", () => this.toggle());
-  this.button.addEventListener("keydown", (e) => this.handleDropdownKeydown(e));
-  this.dropdown.addEventListener("keydown", (e) =>
-    this.handleDropdownKeydown(e),
-  );
+  // this.button.addEventListener("keydown", (e) => this.handleDropdownKeydown(e));
+  // this.dropdown.addEventListener("keydown", (e) =>
+  //   this.handleDropdownKeydown(e),
+  // );
 
   document.addEventListener("click", (e) => {
     if (!this.root.contains(e.target)) this.toggle(false);
@@ -51,9 +51,34 @@ Dropdown.prototype.toggle = function (open = null) {
 };
 
 Dropdown.prototype.selectOption = function (option) {
-  this.options.forEach((o) => o.classList.remove("selected"));
-  option.classList.add("selected");
-  this.selectedValue.textContent = option.textContent.trim();
+  if (this.type === "units") {
+    const group = option.dataset.group;
+
+    this.options.forEach((o) => {
+      if (o.dataset.group === group) {
+        o.classList.remove("selected");
+      }
+    });
+
+    option.classList.add("selected");
+
+    const groupedSelections = {};
+
+    [...this.options].forEach((o) => {
+      if (o.classList.contains("selected")) {
+        groupedSelections[o.dataset.group] = o.dataset.value;
+      }
+    });
+
+    this.selectedValue.textContent = "Units";
+    this.selectedOptions = groupedSelections;
+    console.log(groupedSelections);
+  } else {
+    this.options.forEach((o) => o.classList.remove("selected"));
+    option.classList.add("selected");
+    this.selectedValue.textContent = option.textContent.trim();
+    this.selectedOptions = { default: option.dataset.value };
+  }
 };
 
 Dropdown.prototype.updateFocus = function () {
@@ -63,32 +88,32 @@ Dropdown.prototype.updateFocus = function () {
   });
 };
 
-Dropdown.prototype.handleButtonKeydown = function (event) {
-  if (event.key === "ArrowDown") {
-    event.preventDefault();
-    this.toggle(true);
-  } else if (event.key === "Escape") {
-    this.toggle(false);
-  }
-};
-
-Dropdown.prototype.handleDropdownKeydown = function (event) {
-  if (event.key === "ArrowDown") {
-    event.preventDefault();
-    this.focusedIndex = (this.focusedIndex + 1) % this.options.length;
-    this.updateFocus();
-  } else if (event.key === "ArrowUp") {
-    event.preventDefault();
-    this.focusedIndex =
-      (this.focusedIndex - 1 + this.options.length) % this.options.length;
-    this.updateFocus();
-  } else if (event.key === "Enter" || event.key === " ") {
-    event.preventDefault();
-    this.selectOption(this.options[this.focusedIndex]);
-    this.toggle(false);
-  } else if (event.key === "Escape") {
-    this.toggle(false);
-  }
-};
+// Dropdown.prototype.handleButtonKeydown = function (event) {
+//   if (event.key === "ArrowDown") {
+//     event.preventDefault();
+//     this.toggle(true);
+//   } else if (event.key === "Escape") {
+//     this.toggle(false);
+//   }
+// };
+//
+// Dropdown.prototype.handleDropdownKeydown = function (event) {
+//   if (event.key === "ArrowDown") {
+//     event.preventDefault();
+//     this.focusedIndex = (this.focusedIndex + 1) % this.options.length;
+//     this.updateFocus();
+//   } else if (event.key === "ArrowUp") {
+//     event.preventDefault();
+//     this.focusedIndex =
+//       (this.focusedIndex - 1 + this.options.length) % this.options.length;
+//     this.updateFocus();
+//   } else if (event.key === "Enter" || event.key === " ") {
+//     event.preventDefault();
+//     this.selectOption(this.options[this.focusedIndex]);
+//     this.toggle(false);
+//   } else if (event.key === "Escape") {
+//     this.toggle(false);
+//   }
+// };
 
 document.querySelectorAll(".select").forEach((root) => new Dropdown(root));

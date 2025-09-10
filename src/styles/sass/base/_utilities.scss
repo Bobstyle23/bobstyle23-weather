@@ -78,6 +78,10 @@
     color: $color-white;
     outline: none;
 
+    span {
+      display: none;
+    }
+
     &:not(:last-child) {
       margin-block-end: $spacing-4;
     }
@@ -92,6 +96,10 @@
     &.selected {
       background-color: $color-neutral-700;
       border-radius: $radius-8;
+
+      span {
+        display: inline-block;
+      }
     }
   }
 
