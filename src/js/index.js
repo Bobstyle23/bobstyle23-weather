@@ -23,13 +23,6 @@ class Main {
     this.searchBtn = document.querySelector(".search__btn");
   }
 
-  getLocationData(location) {
-    this.weatherData.fetchLocationData(location).then((data) => {
-      this.locationData = data.results;
-      console.log(data.results);
-    });
-  }
-
   bindEvents() {
     const utilities = new Utilities();
     this.searchField.addEventListener(
@@ -43,6 +36,13 @@ class Main {
         longitude: this.locationData[0].longitude,
       }),
     );
+  }
+
+  getLocationData(location) {
+    this.weatherData.fetchLocationData(location).then((data) => {
+      this.locationData = data.results;
+      console.log(data.results);
+    });
   }
 
   getWeatherDataByLocation(param) {
