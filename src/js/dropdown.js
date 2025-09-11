@@ -1,6 +1,9 @@
 function Dropdown(root) {
+  this.measureUnit = "metrics";
   this.cacheDOM(root);
   this.init();
+  this.groupedSelection = {};
+  this.selectInitialUnits();
 }
 
 Dropdown.prototype.cacheDOM = function (root) {
@@ -9,6 +12,7 @@ Dropdown.prototype.cacheDOM = function (root) {
   this.dropdown = root.querySelector(".select__dropdown");
   this.options = this.dropdown.querySelectorAll("li");
   this.selectedValue = root.querySelector(".selected__value");
+  this.switchUnitButton = document.querySelector(".switch");
 
   this.focusedIndex = -1;
   this.defaultValue = root.dataset.default || this.options[0]?.innerText.trim();
@@ -17,19 +21,28 @@ Dropdown.prototype.cacheDOM = function (root) {
 
 Dropdown.prototype.init = function () {
   this.selectedValue.textContent = this.defaultValue;
-  this.options.forEach((option) => {
-    option.addEventListener("click", () => {
-      this.selectOption(option);
-      this.toggle(false);
+
+  if (this.type !== "units") {
+    this.options.forEach((option) => {
+      option.addEventListener("click", () => {
+        this.selectOption(option);
+        this.toggle(false);
+      });
     });
-  });
+  }
 
   this.button.addEventListener("click", () => this.toggle());
+
   // PERF: keyboard events
   this.button.addEventListener("keydown", (e) => this.handleDropdownKeydown(e));
   this.dropdown.addEventListener("keydown", (e) =>
     this.handleDropdownKeydown(e),
   );
+
+  this.switchUnitButton.addEventListener("click", () => {
+    this.switchUnit();
+    this.toggle(false);
+  });
 
   document.addEventListener("click", (e) => {
     if (!this.root.contains(e.target)) this.toggle(false);
@@ -51,34 +64,44 @@ Dropdown.prototype.toggle = function (open = null) {
   }
 };
 
+Dropdown.prototype.selectInitialUnits = function () {
+  this.options.forEach((option) => {
+    if (option.dataset.unit === this.measureUnit) {
+      option.classList.add("selected");
+    }
+
+    if (option.classList.contains("selected")) {
+      this.groupedSelection[option.dataset.group] = option.dataset.value;
+    }
+  });
+};
+
+Dropdown.prototype.switchUnit = function () {
+  this.measureUnit = this.measureUnit === "metrics" ? "imperial" : "metrics";
+
+  this.switchUnitButton.textContent =
+    this.measureUnit === "metrics" ? "Switch to Imperial" : "Switch to Metrics";
+
+  this.options.forEach((option) => {
+    //PERF: remove selected class initially
+    option.classList.remove("selected");
+    if (option.dataset.unit === this.measureUnit) {
+      option.classList.add("selected");
+    }
+    if (option.classList.contains("selected")) {
+      this.groupedSelection[option.dataset.group] = option.dataset.value;
+    }
+  });
+};
+
 Dropdown.prototype.selectOption = function (option) {
-  if (this.type === "units") {
-    const group = option.dataset.group;
-
-    this.options.forEach((o) => {
-      if (o.dataset.group === group) {
-        o.classList.remove("selected");
-      }
-    });
-
-    option.classList.add("selected");
-
-    const groupedSelections = {};
-
-    [...this.options].forEach((o) => {
-      if (o.classList.contains("selected")) {
-        groupedSelections[o.dataset.group] = o.dataset.value;
-      }
-    });
-
-    this.selectedValue.textContent = "Units";
-    this.selectedOptions = groupedSelections;
-  } else {
+  if (this.type !== "units") {
     this.options.forEach((o) => o.classList.remove("selected"));
     option.classList.add("selected");
     this.selectedValue.textContent = option.textContent.trim();
     this.selectedOptions = { default: option.dataset.value };
   }
+  return;
 };
 
 Dropdown.prototype.updateFocus = function () {
