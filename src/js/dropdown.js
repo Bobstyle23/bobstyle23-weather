@@ -1,8 +1,8 @@
 function Dropdown(root) {
   this.measureUnit = "metrics";
+  this.groupedSelection = {};
   this.cacheDOM(root);
   this.init();
-  this.groupedSelection = {};
   this.selectInitialUnits();
 }
 
