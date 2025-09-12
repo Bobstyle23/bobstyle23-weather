@@ -1,6 +1,5 @@
 import { WeatherData } from "./weather-data";
-import { Utilities } from "./utilities";
-
+import { utilities } from "./utilities";
 const _locationData = new WeakMap();
 
 class Main {
@@ -26,10 +25,13 @@ class Main {
   }
 
   bindEvents() {
-    const utilities = new Utilities();
+    const getLocationWithDebounce = utilities.debounce((e) => {
+      this.getLocationData(e.target.value);
+    }, 500);
+
     this.searchField.addEventListener("input", (e) => {
       Main.searchValue = e.target.value;
-      utilities.debounce(this.getLocationData(e.target.value), 500);
+      getLocationWithDebounce(e);
     });
 
     this.searchBtn.addEventListener("click", () =>

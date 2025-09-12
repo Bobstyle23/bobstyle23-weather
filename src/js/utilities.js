@@ -42,3 +42,4 @@ class Observable {
 }
 
 export const observable = new Observable();
+export const utilities = new Utilities();
