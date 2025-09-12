@@ -20,3 +20,25 @@ export class Utilities {
     };
   }
 }
+
+class Observable {
+  constructor() {
+    this.observables = [];
+  }
+
+  subscribe(callback) {
+    this.observables.push(callback);
+  }
+
+  unsubscribe(callback) {
+    this.observables = this.observables.filter(
+      (observable) => observable !== callback,
+    );
+  }
+
+  notify(data) {
+    this.observables.forEach((observable) => observable(data));
+  }
+}
+
+export const observable = new Observable();
