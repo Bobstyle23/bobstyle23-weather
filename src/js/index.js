@@ -7,8 +7,10 @@ class Main {
   constructor() {
     this.cacheDOM();
     this.bindEvents();
-    this.weatherData = new WeatherData();
   }
+
+  static weatherData = new WeatherData();
+  static searchValue = "";
 
   set locationData(newData) {
     _locationData.set(this, newData);
@@ -25,10 +27,10 @@ class Main {
 
   bindEvents() {
     const utilities = new Utilities();
-    this.searchField.addEventListener(
-      "input",
-      utilities.debounce((e) => this.getLocationData(e.target.value), 500),
-    );
+    this.searchField.addEventListener("input", (e) => {
+      Main.searchValue = e.target.value;
+      utilities.debounce(this.getLocationData(e.target.value), 500);
+    });
 
     this.searchBtn.addEventListener("click", () =>
       this.getWeatherDataByLocation({
@@ -39,14 +41,14 @@ class Main {
   }
 
   getLocationData(location) {
-    this.weatherData.fetchLocationData(location).then((data) => {
+    Main.weatherData.fetchLocationData(location).then((data) => {
       this.locationData = data.results;
       console.log(data.results);
     });
   }
 
   getWeatherDataByLocation(param) {
-    this.weatherData.fetchWeatherData(param).then((data) => {
+    Main.weatherData.fetchWeatherData(param).then((data) => {
       console.log(data);
     });
   }
