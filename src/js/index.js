@@ -29,6 +29,10 @@ class Main {
   cacheDOM() {
     this.searchField = document.querySelector(".search__field");
     this.searchBtn = document.querySelector(".search__btn");
+    this.currentCity = document.querySelector(".current__city");
+    this.currentDate = document.querySelector(".current__date");
+    this.currentDegree = document.querySelector(".current__weather-degree");
+    this.currentWeatherIcon = document.querySelector(".current__weather-icon");
   }
 
   bindEvents() {
@@ -72,7 +76,7 @@ class Main {
           Main.userCurrentData.latitude = latitude;
           Main.userCurrentData.longitude = longitude;
 
-          console.log(Main.userCurrentData);
+          this.updateCurrentWeather();
         },
         (error) => {
           switch (error.code) {
@@ -105,15 +109,17 @@ class Main {
     const options = {
       weekday: "long",
       year: "numeric",
-      month: "long",
+      month: "short",
       day: "numeric",
     };
 
     const formattedTime = now.toLocaleString(undefined, options);
 
     Main.userCurrentData.dateAndTime = formattedTime.split(",");
+  }
 
-    console.log(Main.userCurrentData);
+  updateCurrentWeather() {
+    this.currentDate.textContent = Main.userCurrentData.dateAndTime;
   }
 }
 
