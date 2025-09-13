@@ -41,7 +41,7 @@ Dropdown.prototype.init = function () {
 
   this.switchUnitButton.addEventListener("click", () => {
     this.switchUnit();
-    this.toggle(false);
+    // this.toggle(false);
   });
 
   document.addEventListener("click", (e) => {
