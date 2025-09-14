@@ -126,11 +126,13 @@ class Main {
       year: "numeric",
       month: "short",
       day: "numeric",
+      hour: "numeric",
     };
 
     const formattedTime = now.toLocaleString(undefined, options);
+    console.log(formattedTime.split(" "));
 
-    Main.userCurrentData.dateAndTime = formattedTime.split(",");
+    Main.userCurrentData.dateAndTime = formattedTime.split(",").slice(0, 3);
   }
 
   updateCurrentUserWeather() {
