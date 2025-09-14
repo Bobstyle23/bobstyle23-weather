@@ -28,4 +28,21 @@ export class WeatherData {
     const data = await response.json();
     return data;
   }
+
+  async fetchUsersCountry(lat, lon) {
+    const apiKey = "47ba0bbf5c9aa13204ad8adb08cb800f";
+    const response = await fetch(
+      `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`,
+    );
+    const data = await response.json();
+    return data[0];
+  }
+
+  async fetchFullCountryName(code) {
+    const response = await fetch(
+      `https://restcountries.com/v3.1/alpha/${code}`,
+    );
+    const data = await response.json();
+    return data[0];
+  }
 }

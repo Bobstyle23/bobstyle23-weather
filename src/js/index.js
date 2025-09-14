@@ -2,6 +2,21 @@ import { WeatherData } from "./weather-data";
 import { utilities } from "./utilities";
 const _locationData = new WeakMap();
 
+// NOTE: TODO
+// 0. Add loading state for initial loading
+// 1. Get users location on initial loading
+// 2. Display user's current city with country and current date with current weather degree with weather condition icon
+// 3. Display feels like, humidity, wind, and precipitation indicators for the user's location below current weather indicator
+// 4. Display daily forecasts (day of the week, weather condition icon, high temp and low temp) for each day of the week starting from users current day of the week
+// 5. Display hourly forecasts (max for 8 hours starting from current time) while weekdays dropdown indicating current day of the week
+
+// WARN: On user search
+// 1. Set loading state to true until api returns data and then set to false
+// 2. Show dropdown below search bar with similar cities
+// 3. If city is selected from the dropdown then replace the input value with selected city
+// 4. On search button click set loading state to true until api returns a value and then set the loading state to false
+// 5. Update weather for the selected city (create updateWeatherMethod)
+
 class Main {
   constructor() {
     this.cacheDOM();
@@ -76,7 +91,7 @@ class Main {
           Main.userCurrentData.latitude = latitude;
           Main.userCurrentData.longitude = longitude;
 
-          this.updateCurrentWeather();
+          this.updateCurrentUserWeather();
         },
         (error) => {
           switch (error.code) {
@@ -118,7 +133,20 @@ class Main {
     Main.userCurrentData.dateAndTime = formattedTime.split(",");
   }
 
-  updateCurrentWeather() {
+  updateCurrentUserWeather() {
+    const { latitude, longitude } = Main.userCurrentData;
+    Main.weatherData.fetchWeatherData({ latitude, longitude }).then((data) => {
+      console.log(data);
+    });
+    Main.weatherData
+      .fetchUsersCountry(latitude, longitude)
+      .then((countryData) => {
+        Main.weatherData
+          .fetchFullCountryName(`${countryData.country}`)
+          .then((data) => {
+            this.currentCity.textContent = `${countryData.name}, ${data.name.common}`;
+          });
+      });
     this.currentDate.textContent = Main.userCurrentData.dateAndTime;
   }
 }
