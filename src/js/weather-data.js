@@ -1,3 +1,5 @@
+const apiKey = process.env.API_KEY;
+
 export class WeatherData {
   constructor() {}
 
@@ -30,7 +32,6 @@ export class WeatherData {
   }
 
   async fetchUsersCountry(lat, lon) {
-    const apiKey = "47ba0bbf5c9aa13204ad8adb08cb800f";
     const response = await fetch(
       `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`,
     );

@@ -1,5 +1,9 @@
 const path = require("path");
 const fs = require("fs");
+const dotenv = require("dotenv");
+const webpack = require("webpack");
+
+dotenv.config();
 
 const jsDir = path.resolve(__dirname, "./src/js");
 
@@ -41,6 +45,11 @@ const config = {
       },
     ],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env.API_KEY": JSON.stringify(process.env.API_KEY),
+    }),
+  ],
 };
 
 module.exports = config;
