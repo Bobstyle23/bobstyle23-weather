@@ -62,6 +62,11 @@ class Main {
       );
     }
 
+    if (!this.savedCurrentUnitValues) {
+      this.savedCurrentUnitValues = Array.from(this.currentUnitValues).map(
+        (value) => value.cloneNode(true), // clone the <p> element with content
+      );
+    }
     if (loading) {
       this.currentWeatherBgContainer.setAttribute("hidden", "");
       this.currentWeatherBgLoading.removeAttribute("hidden");
@@ -74,7 +79,10 @@ class Main {
     } else {
       this.currentWeatherBgContainer.removeAttribute("hidden");
       this.currentWeatherBgLoading.setAttribute("hidden", "");
-      this.currentUnitValues.forEach((value) => (value.textContent = ""));
+      this.currentUnitValues.forEach(
+        (valueEl, i) =>
+          valueEl.replaceWith(this.savedCurrentUnitValues[i].cloneNode(true)), // restore the original element
+      );
       this.dailyForecastUnits.forEach((unit, i) => {
         this.savedDailyForecastUnits[i].forEach((child) =>
           unit.appendChild(child),
