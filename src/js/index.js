@@ -14,6 +14,8 @@ class Main {
   constructor() {
     this.cacheDOM();
     this.bindEvents();
+    this.loading = false;
+
     this.getUsersLocation();
     this.getUsersTime();
   }
@@ -37,10 +39,49 @@ class Main {
   cacheDOM() {
     this.searchField = document.querySelector(".search__field");
     this.searchBtn = document.querySelector(".search__btn");
+    this.currentWeatherBgContainer = document.querySelector(".current__bg-img");
+    this.currentWeatherBgLoading = document.querySelector(".current__loading");
     this.currentCity = document.querySelector(".current__city");
     this.currentDate = document.querySelector(".current__date");
     this.currentDegree = document.querySelector(".current__weather-degree");
     this.currentWeatherIcon = document.querySelector(".current__weather-icon");
+    this.currentUnitValues = document.querySelectorAll(".current__unit--value");
+    this.dailyForecastUnits = document.querySelectorAll(".forecast__unit");
+    this.hourlyDropdownSelected = document.querySelector(
+      ".forecast__header .selected__value",
+    );
+    this.initialSelectedDay = this.hourlyDropdownSelected.textContent;
+  }
+
+  loadingState(loading) {
+    this.loading = loading;
+
+    if (!this.savedDailyForecastUnits) {
+      this.savedDailyForecastUnits = [...this.dailyForecastUnits].map((unit) =>
+        [...unit.children].map((child) => child.cloneNode(true)),
+      );
+    }
+
+    if (loading) {
+      this.currentWeatherBgContainer.setAttribute("hidden", "");
+      this.currentWeatherBgLoading.removeAttribute("hidden");
+      this.currentUnitValues.forEach((value) => {
+        const loadingIcon = "-";
+        value.textContent = loadingIcon;
+      });
+      this.dailyForecastUnits.forEach((unit) => (unit.innerHTML = ""));
+      this.hourlyDropdownSelected.textContent = "-";
+    } else {
+      this.currentWeatherBgContainer.removeAttribute("hidden");
+      this.currentWeatherBgLoading.setAttribute("hidden", "");
+      this.currentUnitValues.forEach((value) => (value.textContent = ""));
+      this.dailyForecastUnits.forEach((unit, i) => {
+        this.savedDailyForecastUnits[i].forEach((child) =>
+          unit.appendChild(child),
+        );
+      });
+      this.hourlyDropdownSelected.textContent = this.initialSelectedDay;
+    }
   }
 
   bindEvents() {
@@ -75,39 +116,57 @@ class Main {
   }
 
   getUsersLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
+    try {
+      this.loadingState(true);
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
 
-          Main.userCurrentData.latitude = latitude;
-          Main.userCurrentData.longitude = longitude;
+            Main.userCurrentData.latitude = latitude;
+            Main.userCurrentData.longitude = longitude;
 
-          this.updateCurrentUserWeather();
-        },
-        (error) => {
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              console.error("User denied the request for geolocation");
-              break;
+            this.loadingState(true);
+            await this.updateCurrentUserWeather();
+            // await new Promise((resolve) => {
+            //   setTimeout(() => {
+            //     this.updateCurrentUserWeather();
+            //     resolve();
+            //   }, 1000);
+            // });
+            this.loadingState(false);
+          },
 
-            case error.POSITION_UNAVAILABLE:
-              console.error("Location information unavailable");
-              break;
+          (error) => {
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                console.error("User denied the request for geolocation");
+                break;
 
-            case error.TIMEOUT:
-              console.error("The request to get user location timed out");
-              break;
+              case error.POSITION_UNAVAILABLE:
+                console.error("Location information unavailable");
+                break;
 
-            default:
-              console.error("Unknown error occured.");
-              break;
-          }
-        },
-      );
-    } else {
-      console.error("geolocation is not supporter by this browser");
+              case error.TIMEOUT:
+                console.error("The request to get user location timed out");
+                break;
+
+              default:
+                console.error("Unknown error occured.");
+                break;
+            }
+
+            this.loadingState(false);
+          },
+        );
+      } else {
+        console.error("geolocation is not supporter by this browser");
+        this.loadingState(false);
+      }
+    } catch (error) {
+      console.log(error);
+      this.loadingState(false);
     }
   }
 
@@ -123,26 +182,33 @@ class Main {
     };
 
     const formattedTime = now.toLocaleString(undefined, options);
-    console.log(formattedTime.split(" "));
-
     Main.userCurrentData.dateAndTime = formattedTime.split(",").slice(0, 3);
   }
 
-  updateCurrentUserWeather() {
-    const { latitude, longitude } = Main.userCurrentData;
-    Main.weatherData.fetchWeatherData({ latitude, longitude }).then((data) => {
-      console.log(data);
-    });
-    Main.weatherData
-      .fetchUsersCountry(latitude, longitude)
-      .then((countryData) => {
-        Main.weatherData
-          .fetchFullCountryName(`${countryData.country}`)
-          .then((data) => {
-            this.currentCity.textContent = `${countryData.name}, ${data.name.common}`;
-          });
+  async updateCurrentUserWeather() {
+    try {
+      const { latitude, longitude } = Main.userCurrentData;
+
+      const weatherData = await Main.weatherData.fetchWeatherData({
+        latitude,
+        longitude,
       });
-    this.currentDate.textContent = Main.userCurrentData.dateAndTime;
+      console.log(weatherData);
+
+      const countryData = await Main.weatherData.fetchUsersCountry(
+        latitude,
+        longitude,
+      );
+
+      const fullCountry = await Main.weatherData.fetchFullCountryName(
+        countryData.country,
+      );
+
+      this.currentCity.textContent = `${countryData.name}, ${fullCountry.name.common}`;
+      this.currentDate.textContent = Main.userCurrentData.dateAndTime;
+    } catch (error) {
+      console.error("Error updating current user weather:", error);
+    }
   }
 }
 

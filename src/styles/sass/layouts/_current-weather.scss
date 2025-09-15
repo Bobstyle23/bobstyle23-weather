@@ -7,8 +7,14 @@
     gap: $spacing-32;
   }
 
+  &__loading {
+  }
+
   &__bg-img {
     position: relative;
+    img {
+      width: 100%;
+    }
   }
 
   &__data {
@@ -103,4 +109,9 @@
       color: $color-white;
     }
   }
+}
+
+.loading-icon {
+  @extend %text-preset-3;
+  color: $color-white;
 }

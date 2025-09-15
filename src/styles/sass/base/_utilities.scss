@@ -45,7 +45,9 @@
     gap: $spacing-12;
     @extend %text-preset-7;
     color: $color-white;
-    width: 100%;
+    min-width: 6.7rem;
+    justify-self: end;
+    /* width: 100%; */
     padding: $spacing-8 $spacing-16;
     border-radius: $radius-8;
     cursor: pointer;
