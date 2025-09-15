@@ -10,13 +10,6 @@ const _locationData = new WeakMap();
 // 4. Display daily forecasts (day of the week, weather condition icon, high temp and low temp) for each day of the week starting from users current day of the week
 // 5. Display hourly forecasts (max for 8 hours starting from current time) while weekdays dropdown indicating current day of the week
 
-// WARN: On user search
-// 1. Set loading state to true until api returns data and then set to false
-// 2. Show dropdown below search bar with similar cities
-// 3. If city is selected from the dropdown then replace the input value with selected city
-// 4. On search button click set loading state to true until api returns a value and then set the loading state to false
-// 5. Update weather for the selected city (create updateWeatherMethod)
-
 class Main {
   constructor() {
     this.cacheDOM();

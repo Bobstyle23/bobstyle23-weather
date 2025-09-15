@@ -92,5 +92,15 @@
     width: auto;
     border-radius: $radius-12;
     padding: $spacing-20;
+
+    &--label {
+      @extend %text-preset-6;
+      color: $color-neutral-200;
+    }
+
+    &--value {
+      @extend %text-preset-3;
+      color: $color-white;
+    }
   }
 }

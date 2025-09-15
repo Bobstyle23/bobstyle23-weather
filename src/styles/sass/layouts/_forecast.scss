@@ -30,11 +30,41 @@
     @extend %flexbox;
     flex-flow: column nowrap;
     gap: $spacing-16;
+    align-items: center;
+    padding-block: $spacing-16;
+    padding-inline: $spacing-10;
     width: auto;
     min-height: 16.5rem;
     background-color: $color-neutral-800;
     box-shadow: inset 0 0 0 1px $color-neutral-600;
     border-radius: $radius-12;
+
+    div {
+      @extend %flexbox;
+      flex-flow: row nowrap;
+      align-self: stretch;
+      justify-content: space-between;
+    }
+
+    &--day {
+      @extend %text-preset-6;
+      color: $color-white;
+    }
+
+    &--icon {
+      width: 6rem;
+      height: 6rem;
+    }
+
+    &--low,
+    &--high {
+      @extend %text-preset-7;
+      color: $color-white;
+    }
+
+    &--low {
+      color: $color-neutral-200;
+    }
   }
 
   &--daily {
@@ -78,5 +108,25 @@
     padding-block: $spacing-10;
     padding-inline-start: $spacing-12;
     padding-inline-end: $spacing-16;
+
+    @extend %grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    column-gap: $spacing-8;
+
+    &-icon {
+      width: 4rem;
+      height: 4rem;
+    }
+
+    &-time {
+      @extend %text-preset-5-md;
+      color: $color-white;
+    }
+
+    &-temp {
+      @extend %text-preset-7;
+      color: $color-white;
+    }
   }
 }
