@@ -3,7 +3,7 @@ import { utilities } from "./utilities";
 const _locationData = new WeakMap();
 
 // NOTE: TODO
-// 0. Add loading state for initial loading
+// 0. Add loading state for initial loading ✅
 // 1. Get users location on initial loading
 // 2. Display user's current city with country and current date with current weather degree with weather condition icon
 // 3. Display feels like, humidity, wind, and precipitation indicators for the user's location below current weather indicator
@@ -79,9 +79,8 @@ class Main {
     } else {
       this.currentWeatherBgContainer.removeAttribute("hidden");
       this.currentWeatherBgLoading.setAttribute("hidden", "");
-      this.currentUnitValues.forEach(
-        (valueEl, i) =>
-          valueEl.replaceWith(this.savedCurrentUnitValues[i].cloneNode(true)), // restore the original element
+      this.currentUnitValues.forEach((valueEl, i) =>
+        valueEl.replaceWith(this.savedCurrentUnitValues[i].cloneNode(true)),
       );
       this.dailyForecastUnits.forEach((unit, i) => {
         this.savedDailyForecastUnits[i].forEach((child) =>
@@ -137,12 +136,7 @@ class Main {
 
             this.loadingState(true);
             await this.updateCurrentUserWeather();
-            // await new Promise((resolve) => {
-            //   setTimeout(() => {
-            //     this.updateCurrentUserWeather();
-            //     resolve();
-            //   }, 1000);
-            // });
+
             this.loadingState(false);
           },
 
@@ -190,6 +184,7 @@ class Main {
     };
 
     const formattedTime = now.toLocaleString(undefined, options);
+
     Main.userCurrentData.dateAndTime = formattedTime.split(",").slice(0, 3);
   }
 
@@ -202,6 +197,55 @@ class Main {
         longitude,
       });
       console.log(weatherData);
+
+      const currentTime = new Date().toLocaleString();
+
+      // const currentHour =
+      //   new Date(currentTime).toISOString().slice(0, 13) + ":00";
+
+      const currentDate = new Date();
+      const currentHourOnly = new Date(
+        currentDate.getTime() + 9 * 60 * 60 * 1000,
+      );
+
+      currentHourOnly.setMinutes(0, 0, 0);
+      const isoCurrentHour = currentHourOnly.toISOString().slice(0, 13) + ":00";
+      const timeIndex = weatherData.hourly.time.indexOf(isoCurrentHour);
+
+      if (timeIndex !== -1) {
+        const currentWeather = {
+          temperature: weatherData.hourly.temperature_2m[timeIndex],
+          apparentTemperature:
+            weatherData.hourly.apparent_temperature[timeIndex],
+          humidity: weatherData.hourly.relative_humidity_2m[timeIndex],
+          precipitation: weatherData.hourly.precipitation[timeIndex],
+          weatherCode: weatherData.hourly.weathercode[timeIndex],
+          windSpeed: weatherData.hourly.windspeed_10m[timeIndex],
+          cloudCover: weatherData.hourly.cloudcover[timeIndex],
+          uvIndex: weatherData.hourly.uv_index[timeIndex],
+        };
+
+        const currentWeatherUnits = [
+          `${currentWeather.apparentTemperature.toFixed(0)}&deg;`,
+          `${currentWeather.humidity}%`,
+          `${currentWeather.windSpeed} ${weatherData.hourly_units.windspeed_10m}`,
+          `${currentWeather.precipitation} ${weatherData.hourly_units.precipitation}`,
+        ];
+
+        this.currentDegree.innerHTML = `${currentWeather.temperature.toFixed(0)}&deg;`;
+        const weatherIcon = utilities.getWeatherGroupByCode(
+          currentWeather.weatherCode,
+        );
+        this.currentWeatherIcon.setAttribute(
+          "src",
+          `./img/icon-${weatherIcon === "clear" ? "overcast" : weatherIcon}.webp`,
+        );
+
+        this.currentUnitValues.forEach((unit, idx) => {
+          unit.innerHTML = currentWeatherUnits[idx];
+        });
+        console.log(currentWeather);
+      }
 
       const countryData = await Main.weatherData.fetchUsersCountry(
         latitude,
