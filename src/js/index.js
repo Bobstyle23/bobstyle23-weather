@@ -1,13 +1,13 @@
 import { WeatherData } from "./weather-data";
-import { utilities } from "./utilities";
+import { observable, utilities } from "./utilities";
 const _locationData = new WeakMap();
 
 // NOTE: TODO
 // 0. Add loading state for initial loading ✅
-// 1. Get users location on initial loading
-// 2. Display user's current city with country and current date with current weather degree with weather condition icon
-// 3. Display feels like, humidity, wind, and precipitation indicators for the user's location below current weather indicator
-// 4. Display daily forecasts (day of the week, weather condition icon, high temp and low temp) for each day of the week starting from users current day of the week
+// 1. Get users location on initial loading ✅
+// 2. Display user's current city with country and current date with current weather degree with weather condition icon ✅
+// 3. Display feels like, humidity, wind, and precipitation indicators for the user's location below current weather indicator ✅
+// 4. Display daily forecasts (day of the week, weather condition icon, high temp and low temp) for each day of the week starting from users current day of the week ✅
 // 5. Display hourly forecasts (max for 8 hours starting from current time) while weekdays dropdown indicating current day of the week
 
 class Main {
@@ -46,7 +46,12 @@ class Main {
     this.currentDegree = document.querySelector(".current__weather-degree");
     this.currentWeatherIcon = document.querySelector(".current__weather-icon");
     this.currentUnitValues = document.querySelectorAll(".current__unit--value");
-    this.dailyForecastUnits = document.querySelectorAll(".forecast__unit");
+    this.forecastUnits = document.querySelectorAll(".forecast__unit");
+
+    this.dailyForecastUnit = document.querySelector(
+      ".forecast--daily .forecast__units",
+    );
+
     this.hourlyDropdownSelected = document.querySelector(
       ".forecast__header .selected__value",
     );
@@ -56,8 +61,8 @@ class Main {
   loadingState(loading) {
     this.loading = loading;
 
-    if (!this.savedDailyForecastUnits) {
-      this.savedDailyForecastUnits = [...this.dailyForecastUnits].map((unit) =>
+    if (!this.savedForecastUnits) {
+      this.savedForecastUnits = [...this.forecastUnits].map((unit) =>
         [...unit.children].map((child) => child.cloneNode(true)),
       );
     }
@@ -67,6 +72,7 @@ class Main {
         (value) => value.cloneNode(true), // clone the <p> element with content
       );
     }
+
     if (loading) {
       this.currentWeatherBgContainer.setAttribute("hidden", "");
       this.currentWeatherBgLoading.removeAttribute("hidden");
@@ -74,19 +80,15 @@ class Main {
         const loadingIcon = "-";
         value.textContent = loadingIcon;
       });
-      this.dailyForecastUnits.forEach((unit) => (unit.innerHTML = ""));
+      this.forecastUnits.forEach((unit) => (unit.innerHTML = ""));
       this.hourlyDropdownSelected.textContent = "-";
     } else {
       this.currentWeatherBgContainer.removeAttribute("hidden");
       this.currentWeatherBgLoading.setAttribute("hidden", "");
-      this.currentUnitValues.forEach((valueEl, i) =>
-        valueEl.replaceWith(this.savedCurrentUnitValues[i].cloneNode(true)),
-      );
-      this.dailyForecastUnits.forEach((unit, i) => {
-        this.savedDailyForecastUnits[i].forEach((child) =>
-          unit.appendChild(child),
-        );
+      this.forecastUnits.forEach((unit, i) => {
+        this.savedForecastUnits[i].forEach((child) => unit.appendChild(child));
       });
+
       this.hourlyDropdownSelected.textContent = this.initialSelectedDay;
     }
   }
@@ -200,10 +202,8 @@ class Main {
 
       const currentTime = new Date().toLocaleString();
 
-      // const currentHour =
-      //   new Date(currentTime).toISOString().slice(0, 13) + ":00";
-
       const currentDate = new Date();
+      const currentISODate = currentDate.toISOString().slice(0, 10); //returns year-month-date
       const currentHourOnly = new Date(
         currentDate.getTime() + 9 * 60 * 60 * 1000,
       );
@@ -211,6 +211,7 @@ class Main {
       currentHourOnly.setMinutes(0, 0, 0);
       const isoCurrentHour = currentHourOnly.toISOString().slice(0, 13) + ":00";
       const timeIndex = weatherData.hourly.time.indexOf(isoCurrentHour);
+      const dayIndex = weatherData.daily.time.indexOf(currentISODate);
 
       if (timeIndex !== -1) {
         const currentWeather = {
@@ -225,6 +226,37 @@ class Main {
           uvIndex: weatherData.hourly.uv_index[timeIndex],
         };
 
+        const dayNames = weatherData.daily.time.map((date) => {
+          const day = new Date(date);
+          return day.toLocaleDateString("en-US", { weekday: "short" });
+        });
+
+        const dailyWeatherDatas = {
+          dailyTemperatures: {
+            high: weatherData.daily.temperature_2m_max.map((temp) => temp),
+            low: weatherData.daily.temperature_2m_min.map((temp) => temp),
+          },
+          days: dayNames,
+          weatherCodes: weatherData.daily.weathercode.map((code) => code),
+        };
+
+        const dailyWeatherItems = dailyWeatherDatas.days.map((day, idx) => ({
+          day,
+          highTemp: dailyWeatherDatas.dailyTemperatures.high[idx],
+          lowTemp: dailyWeatherDatas.dailyTemperatures.low[idx],
+          code: dailyWeatherDatas.weatherCodes[idx],
+        }));
+
+        const dailyForecastHTML = dailyWeatherItems.map((weather) => {
+          return `<article class="forecast__unit"> <p class="forecast__unit--day">${weather.day}</p> 
+        <img class="forecast__unit--icon" src="./img/icon-${utilities.getWeatherGroupByCode(weather.code)}.webp" /> <div>
+        <p class="forecast__unit--high">${weather.highTemp.toFixed(0)}&deg;</p>
+        <p class="forecast__unit--low">${weather.lowTemp.toFixed(0)}&deg;</p>
+        </div></article>`;
+        });
+
+        this.dailyForecastUnit.innerHTML = dailyForecastHTML.join("");
+
         const currentWeatherUnits = [
           `${currentWeather.apparentTemperature.toFixed(0)}&deg;`,
           `${currentWeather.humidity}%`,
@@ -238,7 +270,7 @@ class Main {
         );
         this.currentWeatherIcon.setAttribute(
           "src",
-          `./img/icon-${weatherIcon === "clear" ? "overcast" : weatherIcon}.webp`,
+          `./img/icon-${weatherIcon}.webp`,
         );
 
         this.currentUnitValues.forEach((unit, idx) => {
