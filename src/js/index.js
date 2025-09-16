@@ -48,6 +48,14 @@ class Main {
     this.currentUnitValues = document.querySelectorAll(".current__unit--value");
     this.forecastUnits = document.querySelectorAll(".forecast__unit");
 
+    this.daysDropdown = document.querySelectorAll(
+      '[data-type="days"] .select__dropdown li',
+    );
+
+    this.daysDropdownDefault = document.querySelector(
+      '[data-type="days"] .selected__value',
+    );
+
     this.dailyForecastUnit = document.querySelector(
       ".forecast--daily .forecast__units",
     );
@@ -55,10 +63,7 @@ class Main {
       ".forecast--hourly .forecast__units",
     );
 
-    this.hourlyDropdownSelected = document.querySelector(
-      ".forecast__header .selected__value",
-    );
-    this.initialSelectedDay = this.hourlyDropdownSelected.textContent;
+    this.initialSelectedDay = this.daysDropdownDefault.textContent;
   }
 
   loadingState(loading) {
@@ -84,15 +89,13 @@ class Main {
         value.textContent = loadingIcon;
       });
       this.forecastUnits.forEach((unit) => (unit.innerHTML = ""));
-      this.hourlyDropdownSelected.textContent = "-";
+      this.daysDropdownDefault.textContent = "-";
     } else {
       this.currentWeatherBgContainer.removeAttribute("hidden");
       this.currentWeatherBgLoading.setAttribute("hidden", "");
       this.forecastUnits.forEach((unit, i) => {
         this.savedForecastUnits[i].forEach((child) => unit.appendChild(child));
       });
-
-      this.hourlyDropdownSelected.textContent = this.initialSelectedDay;
     }
   }
 
@@ -235,6 +238,20 @@ class Main {
           const day = new Date(date);
           return day.toLocaleDateString("en-US", { weekday: "short" });
         });
+
+        const longDayNames = weatherData.daily.time.map((date) => {
+          const day = new Date(date);
+          return day.toLocaleDateString("en-US", { weekday: "long" });
+        });
+
+        const dayOptions = longDayNames.map((day) => day);
+
+        this.daysDropdown.forEach((dropdown, idx) => {
+          dropdown.textContent = dayOptions[idx];
+          dropdown.dataset.value = dayOptions[idx].toLowerCase();
+        });
+
+        this.daysDropdownDefault.textContent = dayOptions[0];
 
         const dailyWeatherDatas = {
           dailyTemperatures: {
