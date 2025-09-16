@@ -8,7 +8,7 @@ const _locationData = new WeakMap();
 // 2. Display user's current city with country and current date with current weather degree with weather condition icon ✅
 // 3. Display feels like, humidity, wind, and precipitation indicators for the user's location below current weather indicator ✅
 // 4. Display daily forecasts (day of the week, weather condition icon, high temp and low temp) for each day of the week starting from users current day of the week ✅
-// 5. Display hourly forecasts (max for 8 hours starting from current time) while weekdays dropdown indicating current day of the week
+// 5. Display hourly forecasts (max for 8 hours starting from current time) while weekdays dropdown indicating current day of the week ✅
 
 class Main {
   constructor() {
