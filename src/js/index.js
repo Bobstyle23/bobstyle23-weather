@@ -51,6 +51,9 @@ class Main {
     this.dailyForecastUnit = document.querySelector(
       ".forecast--daily .forecast__units",
     );
+    this.hourlyForecastUnit = document.querySelector(
+      ".forecast--hourly .forecast__units",
+    );
 
     this.hourlyDropdownSelected = document.querySelector(
       ".forecast__header .selected__value",
@@ -210,6 +213,8 @@ class Main {
 
       currentHourOnly.setMinutes(0, 0, 0);
       const isoCurrentHour = currentHourOnly.toISOString().slice(0, 13) + ":00";
+      console.log(isoCurrentHour);
+
       const timeIndex = weatherData.hourly.time.indexOf(isoCurrentHour);
       const dayIndex = weatherData.daily.time.indexOf(currentISODate);
 
@@ -257,6 +262,44 @@ class Main {
 
         this.dailyForecastUnit.innerHTML = dailyForecastHTML.join("");
 
+        const hoursArray = weatherData.hourly.time.slice(
+          timeIndex + 1,
+          timeIndex + 9,
+        );
+
+        hoursArray.map((hour) => {
+          const hourIndex = weatherData.hourly.time.indexOf(hour);
+
+          if (hourIndex !== -1) {
+            const hourlyForecastArray = hoursArray
+              .map((hour) => {
+                const hourIndex = weatherData.hourly.time.indexOf(hour);
+
+                if (hourIndex !== -1) {
+                  return {
+                    temperature: weatherData.hourly.temperature_2m[hourIndex],
+                    weatherCode: weatherData.hourly.weathercode[hourIndex],
+                    time: weatherData.hourly.time[hourIndex],
+                  };
+                }
+                return null;
+              })
+              .filter(Boolean);
+
+            const hourltForecastHTML = hourlyForecastArray.map((weather) => {
+              const date = new Date(weather.time);
+              const formatterHour = date.toLocaleString("en-US", {
+                hour: "numeric",
+                hours12: true,
+              });
+
+              return `<article class="forecast__unit forecast__unit--hourly"><img class="forecast__unit--hourly-icon" src="./img/icon-${utilities.getWeatherGroupByCode(weather.weatherCode)}.webp"/><p class="forecast__unit--hourly-time">${formatterHour}</p><p class="forecast__unit--hourly-temp">${weather.temperature.toFixed()}&deg;</p></article>`;
+            });
+
+            this.hourlyForecastUnit.innerHTML = hourltForecastHTML.join("");
+          }
+        });
+
         const currentWeatherUnits = [
           `${currentWeather.apparentTemperature.toFixed(0)}&deg;`,
           `${currentWeather.humidity}%`,
@@ -276,7 +319,6 @@ class Main {
         this.currentUnitValues.forEach((unit, idx) => {
           unit.innerHTML = currentWeatherUnits[idx];
         });
-        console.log(currentWeather);
       }
 
       const countryData = await Main.weatherData.fetchUsersCountry(
