@@ -3,12 +3,12 @@ import { observable, utilities } from "./utilities";
 const _locationData = new WeakMap();
 
 // NOTE: TODO
-// 0. Add loading state for initial loading ✅
-// 1. Get users location on initial loading ✅
-// 2. Display user's current city with country and current date with current weather degree with weather condition icon ✅
-// 3. Display feels like, humidity, wind, and precipitation indicators for the user's location below current weather indicator ✅
-// 4. Display daily forecasts (day of the week, weather condition icon, high temp and low temp) for each day of the week starting from users current day of the week ✅
-// 5. Display hourly forecasts (max for 8 hours starting from current time) while weekdays dropdown indicating current day of the week ✅
+// 1. Move weather updating functions into utilities with necessary parameters
+// 2. On city/location search show dropdown list with similar city names
+// 3. On city/location select from search dropdown list set the search field value to selected value
+// 4. On search button click trigger loading state until api returns a data
+// 5. After api data returned set loading state to false and populate api data according to location
+//
 
 class Main {
   constructor() {
@@ -26,6 +26,8 @@ class Main {
     latitude: null,
     longitude: null,
     dateAndTime: null,
+    country: null,
+    city: null,
   };
 
   set locationData(newData) {
@@ -77,7 +79,7 @@ class Main {
 
     if (!this.savedCurrentUnitValues) {
       this.savedCurrentUnitValues = Array.from(this.currentUnitValues).map(
-        (value) => value.cloneNode(true), // clone the <p> element with content
+        (value) => value.cloneNode(true),
       );
     }
 
@@ -117,65 +119,33 @@ class Main {
     );
   }
 
-  getLocationData(location) {
-    Main.weatherData.fetchLocationData(location).then((data) => {
-      this.locationData = data.results;
-      console.log(data.results);
-    });
-  }
+  // getLocationData(location) {
+  //   Main.weatherData.fetchLocationData(location).then((data) => {
+  //     this.locationData = data.results;
+  //     console.log(data.results);
+  //   });
+  // }
+  //
+  // getWeatherDataByLocation(param) {
+  //   Main.weatherData.fetchWeatherData(param).then((data) => {
+  //     console.log(data);
+  //   });
+  // }
 
-  getWeatherDataByLocation(param) {
-    Main.weatherData.fetchWeatherData(param).then((data) => {
-      console.log(data);
-    });
-  }
-
-  getUsersLocation() {
+  async getUsersLocation() {
     try {
       this.loadingState(true);
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
+      const userLocationData = await Main.weatherData.fetchUsersLocation();
 
-            Main.userCurrentData.latitude = latitude;
-            Main.userCurrentData.longitude = longitude;
+      Main.userCurrentData.latitude = userLocationData.latitude;
+      Main.userCurrentData.longitude = userLocationData.longitude;
+      Main.userCurrentData.country = userLocationData.country_name;
+      Main.userCurrentData.city = userLocationData.region;
 
-            this.loadingState(true);
-            await this.updateCurrentUserWeather();
-
-            this.loadingState(false);
-          },
-
-          (error) => {
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                console.error("User denied the request for geolocation");
-                break;
-
-              case error.POSITION_UNAVAILABLE:
-                console.error("Location information unavailable");
-                break;
-
-              case error.TIMEOUT:
-                console.error("The request to get user location timed out");
-                break;
-
-              default:
-                console.error("Unknown error occured.");
-                break;
-            }
-
-            this.loadingState(false);
-          },
-        );
-      } else {
-        console.error("geolocation is not supporter by this browser");
-        this.loadingState(false);
-      }
+      await this.updateCurrentUserWeather();
+      this.loadingState(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       this.loadingState(false);
     }
   }
@@ -196,6 +166,23 @@ class Main {
     Main.userCurrentData.dateAndTime = formattedTime.split(",").slice(0, 3);
   }
 
+  static #dayNames(data, weekdayOption = "short") {
+    return data.daily.time.map((date) => {
+      const day = new Date(date);
+      return day.toLocaleDateString("en-US", { weekday: weekdayOption });
+    });
+  }
+
+  static #formatTime(time) {
+    const formattedTime = new Date(time).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
+    return formattedTime;
+  }
+
   async updateCurrentUserWeather() {
     try {
       const { latitude, longitude } = Main.userCurrentData;
@@ -206,7 +193,7 @@ class Main {
       });
       console.log(weatherData);
 
-      const currentTime = new Date().toLocaleString();
+      // const currentTime = new Date().toLocaleString();
 
       const currentDate = new Date();
       const currentISODate = currentDate.toISOString().slice(0, 10); //returns year-month-date
@@ -216,7 +203,6 @@ class Main {
 
       currentHourOnly.setMinutes(0, 0, 0);
       const isoCurrentHour = currentHourOnly.toISOString().slice(0, 13) + ":00";
-      console.log(isoCurrentHour);
 
       const timeIndex = weatherData.hourly.time.indexOf(isoCurrentHour);
       const dayIndex = weatherData.daily.time.indexOf(currentISODate);
@@ -232,26 +218,23 @@ class Main {
           windSpeed: weatherData.hourly.windspeed_10m[timeIndex],
           cloudCover: weatherData.hourly.cloudcover[timeIndex],
           uvIndex: weatherData.hourly.uv_index[timeIndex],
+          sunrise: weatherData.daily.sunrise[dayIndex],
+          sunset: weatherData.daily.sunset[dayIndex],
+          pressure: weatherData.hourly.pressure_msl[timeIndex],
+          visibility: weatherData.hourly.visibility[timeIndex],
         };
 
-        const dayNames = weatherData.daily.time.map((date) => {
-          const day = new Date(date);
-          return day.toLocaleDateString("en-US", { weekday: "short" });
-        });
-
-        const longDayNames = weatherData.daily.time.map((date) => {
-          const day = new Date(date);
-          return day.toLocaleDateString("en-US", { weekday: "long" });
-        });
-
-        const dayOptions = longDayNames.map((day) => day);
+        const dayNames = Main.#dayNames(weatherData);
+        const longDayNames = Main.#dayNames(weatherData, "long").map(
+          (day) => day,
+        );
 
         this.daysDropdown.forEach((dropdown, idx) => {
-          dropdown.textContent = dayOptions[idx];
-          dropdown.dataset.value = dayOptions[idx].toLowerCase();
+          dropdown.textContent = longDayNames[idx];
+          dropdown.dataset.value = longDayNames[idx].toLowerCase();
         });
 
-        this.daysDropdownDefault.textContent = dayOptions[0];
+        this.daysDropdownDefault.textContent = longDayNames[0];
 
         const dailyWeatherDatas = {
           dailyTemperatures: {
@@ -317,11 +300,18 @@ class Main {
           }
         });
 
+        console.log(Main.#formatTime(currentWeather.sunset));
+
         const currentWeatherUnits = [
+          `${Main.#formatTime(currentWeather.sunrise)}`,
           `${currentWeather.apparentTemperature.toFixed(0)}&deg;`,
           `${currentWeather.humidity}%`,
           `${currentWeather.windSpeed} ${weatherData.hourly_units.windspeed_10m}`,
           `${currentWeather.precipitation} ${weatherData.hourly_units.precipitation}`,
+          `${Math.floor(currentWeather.uvIndex * 10).toFixed()}`,
+          `${currentWeather.pressure.toLocaleString("en-US")}`,
+          `${Math.floor(currentWeather.visibility / 1000)} km`,
+          `${Main.#formatTime(currentWeather.sunset)}`,
         ];
 
         this.currentDegree.innerHTML = `${currentWeather.temperature.toFixed(0)}&deg;`;
@@ -338,16 +328,7 @@ class Main {
         });
       }
 
-      const countryData = await Main.weatherData.fetchUsersCountry(
-        latitude,
-        longitude,
-      );
-
-      const fullCountry = await Main.weatherData.fetchFullCountryName(
-        countryData.country,
-      );
-
-      this.currentCity.textContent = `${countryData.name}, ${fullCountry.name.common}`;
+      this.currentCity.textContent = `${Main.userCurrentData.city}, ${Main.userCurrentData.country}`;
       this.currentDate.textContent = Main.userCurrentData.dateAndTime;
     } catch (error) {
       console.error("Error updating current user weather:", error);
