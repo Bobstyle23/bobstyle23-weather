@@ -300,16 +300,14 @@ class Main {
           }
         });
 
-        console.log(Main.#formatTime(currentWeather.sunset));
-
         const currentWeatherUnits = [
           `${Main.#formatTime(currentWeather.sunrise)}`,
           `${currentWeather.apparentTemperature.toFixed(0)}&deg;`,
           `${currentWeather.humidity}%`,
           `${currentWeather.windSpeed} ${weatherData.hourly_units.windspeed_10m}`,
           `${currentWeather.precipitation} ${weatherData.hourly_units.precipitation}`,
-          `${Math.floor(currentWeather.uvIndex * 10).toFixed()}`,
-          `${currentWeather.pressure.toLocaleString("en-US")}`,
+          `${Math.floor(currentWeather.uvIndex * 1).toFixed()}`,
+          `${Number(currentWeather.pressure.toFixed(0)).toLocaleString("en-US")} ${weatherData.hourly_units.pressure_msl}`,
           `${Math.floor(currentWeather.visibility / 1000)} km`,
           `${Main.#formatTime(currentWeather.sunset)}`,
         ];

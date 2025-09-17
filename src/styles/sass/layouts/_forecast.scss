@@ -87,7 +87,7 @@
     }
 
     @include respond-to($breakpoint-desktops) {
-      grid-area: 2 / 2 / span 2 / -1;
+      grid-area: 2 / 2 / span 1 / -1;
     }
   }
 
