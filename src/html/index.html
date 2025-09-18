@@ -9,9 +9,11 @@
   <body>
     <div class="container">
       <header class="header">
-        @@include("./navigation.html")
+        @@include("./navigation.html") @@include("./error.html")
+
         <h1 class="header__title">How's the sky looking today?</h1>
       </header>
+
       <main class="main">
         @@include("./search.html") @@include("./current-weather.html")
         @@include("./forecast-daily.html") @@include("./forecast-hourly.html")

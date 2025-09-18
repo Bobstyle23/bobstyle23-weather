@@ -1,0 +1,51 @@
+.error {
+  @extend %flexbox;
+  align-items: center;
+  gap: $spacing-24;
+  max-width: 59.3rem;
+  margin-inline: auto;
+  text-align: center;
+
+  &__icon {
+    width: 4.2rem;
+    height: 5rem;
+    fill: $color-neutral-300;
+  }
+
+  &__title {
+    @extend %text-preset-2;
+    color: $color-white;
+  }
+
+  &__desc {
+    @extend %text-preset-5-md;
+    color: $color-neutral-200;
+    text-wrap: auto;
+  }
+
+  &__btn {
+    padding-block: $spacing-12;
+    padding-inline: $spacing-12;
+    background: none;
+    background-color: $color-neutral-800;
+    border-radius: $radius-8;
+    @extend %flexbox;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: $spacing-10;
+    @extend %text-preset-7;
+    color: $color-white;
+
+    transition: all 0.25s ease;
+
+    &:hover {
+      background-color: $color-neutral-700;
+    }
+  }
+
+  &__retry {
+    width: 1.6rem;
+    height: 1.6rem;
+    fill: $color-white;
+  }
+}

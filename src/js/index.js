@@ -1,5 +1,5 @@
 import { WeatherData } from "./weather-data";
-import { observable, utilities } from "./utilities";
+import { utilities } from "./utilities";
 const _locationData = new WeakMap();
 
 // NOTE: TODO
@@ -119,6 +119,7 @@ class Main {
     );
   }
 
+  // PERF: RETURNS LIST OF LOCATION BY SEARCH KEYWORD
   getLocationData(location) {
     Main.weatherData.fetchLocationData(location).then((data) => {
       this.locationData = data.results;
@@ -126,6 +127,7 @@ class Main {
     });
   }
 
+  // PERF: RETURNS ACTUAL WEATHER DATA BY LOCATION
   getWeatherDataByLocation(param) {
     Main.weatherData.fetchWeatherData(param).then((data) => {
       Main.weatherData
@@ -137,6 +139,7 @@ class Main {
     });
   }
 
+  // PERF: UPDATES USER'S LOCATION AUTOMATICALLY ON INITIAL LOAD
   async getUsersLocation() {
     try {
       this.loadingState(true);
@@ -212,7 +215,6 @@ class Main {
       const timeIndex = weatherData.hourly.time.indexOf(isoCurrentHour);
       const dayIndex = weatherData.daily.time.indexOf(currentLocalDate);
 
-      console.log(dayIndex, currentLocalDate, isoCurrentHour, timeIndex);
       if (timeIndex !== -1) {
         const currentWeather = {
           temperature: weatherData.hourly.temperature_2m[timeIndex],
