@@ -31,6 +31,22 @@ export class WeatherData {
     return data;
   }
 
+  async fetchUsersCountry(lat, lon) {
+    const response = await fetch(
+      `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`,
+    );
+    const data = await response.json();
+    return data[0];
+  }
+
+  async fetchFullCountryName(code) {
+    const response = await fetch(
+      `https://restcountries.com/v3.1/alpha/${code}`,
+    );
+    const data = await response.json();
+    return data;
+  }
+
   async fetchUsersLocation() {
     const response = await fetch(`https://ipapi.co/json/`);
     const data = await response.json();

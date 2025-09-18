@@ -119,18 +119,23 @@ class Main {
     );
   }
 
-  // getLocationData(location) {
-  //   Main.weatherData.fetchLocationData(location).then((data) => {
-  //     this.locationData = data.results;
-  //     console.log(data.results);
-  //   });
-  // }
-  //
-  // getWeatherDataByLocation(param) {
-  //   Main.weatherData.fetchWeatherData(param).then((data) => {
-  //     console.log(data);
-  //   });
-  // }
+  getLocationData(location) {
+    Main.weatherData.fetchLocationData(location).then((data) => {
+      this.locationData = data.results;
+      console.log(data.results);
+    });
+  }
+
+  getWeatherDataByLocation(param) {
+    Main.weatherData.fetchWeatherData(param).then((data) => {
+      Main.weatherData
+        .fetchUsersCountry(data.latitude, data.longitude)
+        .then((res) => {
+          console.log(res);
+        });
+      console.log(data);
+    });
+  }
 
   async getUsersLocation() {
     try {
@@ -196,7 +201,7 @@ class Main {
       // const currentTime = new Date().toLocaleString();
 
       const currentDate = new Date();
-      const currentISODate = currentDate.toISOString().slice(0, 10); //returns year-month-date
+      const currentLocalDate = currentDate.toLocaleDateString("en-CA"); //returns year-month-date
       const currentHourOnly = new Date(
         currentDate.getTime() + 9 * 60 * 60 * 1000,
       );
@@ -205,8 +210,9 @@ class Main {
       const isoCurrentHour = currentHourOnly.toISOString().slice(0, 13) + ":00";
 
       const timeIndex = weatherData.hourly.time.indexOf(isoCurrentHour);
-      const dayIndex = weatherData.daily.time.indexOf(currentISODate);
+      const dayIndex = weatherData.daily.time.indexOf(currentLocalDate);
 
+      console.log(dayIndex, currentLocalDate, isoCurrentHour, timeIndex);
       if (timeIndex !== -1) {
         const currentWeather = {
           temperature: weatherData.hourly.temperature_2m[timeIndex],
@@ -306,7 +312,7 @@ class Main {
           `${currentWeather.humidity}%`,
           `${currentWeather.windSpeed} ${weatherData.hourly_units.windspeed_10m}`,
           `${currentWeather.precipitation} ${weatherData.hourly_units.precipitation}`,
-          `${Math.floor(currentWeather.uvIndex * 1).toFixed()}`,
+          `${Math.round(currentWeather.uvIndex * 1).toFixed()}`,
           `${Number(currentWeather.pressure.toFixed(0)).toLocaleString("en-US")} ${weatherData.hourly_units.pressure_msl}`,
           `${Math.floor(currentWeather.visibility / 1000)} km`,
           `${Main.#formatTime(currentWeather.sunset)}`,
