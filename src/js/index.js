@@ -144,6 +144,7 @@ class Main {
           city.addEventListener("click", () => {
             this.searchField.value = city.textContent;
             this.searchList.style.display = "none";
+            Main.searchValue = city.textContent;
           });
         });
       } else if (!Main.searchValue) {
