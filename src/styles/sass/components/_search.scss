@@ -30,6 +30,36 @@
     fill: $color-neutral-200;
   }
 
+  &__list {
+    position: absolute;
+    width: 100%;
+    min-height: 5.5rem;
+    top: calc(100% + 1rem);
+    z-index: 1;
+    border-radius: $radius-12;
+    background-color: $color-neutral-800;
+    padding: $spacing-8;
+    display: none;
+  }
+
+  &__city-name {
+    @extend %text-preset-7;
+    color: $color-white;
+    padding-block: $spacing-10;
+    padding-inline-start: $spacing-8;
+    border-radius: $radius-8;
+
+    &:not(:last-child) {
+      margin-bottom: $radius-4;
+    }
+
+    &:hover {
+      background-color: $color-neutral-700;
+      box-shadow: inset 0 0 0 1px $color-neutral-600;
+      cursor: pointer;
+    }
+  }
+
   &__field {
     width: 100%;
     min-height: 5.6rem;

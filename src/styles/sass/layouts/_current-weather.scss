@@ -58,7 +58,7 @@
     align-items: center;
 
     &-icon {
-      width: 10rem;
+      width: 10rem !important;
       height: 10rem;
 
       @include respond-to($breakpoint-tablets) {

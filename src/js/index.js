@@ -66,6 +66,8 @@ class Main {
     );
 
     this.initialSelectedDay = this.daysDropdownDefault.textContent;
+
+    this.searchList = document.querySelector(".search__list");
   }
 
   loadingState(loading) {
@@ -123,7 +125,30 @@ class Main {
   getLocationData(location) {
     Main.weatherData.fetchLocationData(location).then((data) => {
       this.locationData = data.results;
-      console.log(data.results);
+
+      //PERF: DISPLAYS EVERY AVAILABLE CITY NAMES IN DROPDOWN LIKE BOX
+      if (data.results) {
+        this.searchList.style.display = "block";
+
+        const cityNames = data.results.map((city) => city.name);
+
+        const searchListNames = cityNames.map((city) => {
+          return `<p class="search__city-name">${city}</p>`;
+        });
+
+        this.searchList.innerHTML = searchListNames.join("");
+        this.searchCityNames = document.querySelectorAll(".search__city-name");
+
+        //PERF: SELECTS CITY NAME FROM DROPDOWN AND UPDATES SEARCH FIELD BY CLOSING THE DROPDOWN
+        [...this.searchCityNames].map((city) => {
+          city.addEventListener("click", () => {
+            this.searchField.value = city.textContent;
+            this.searchList.style.display = "none";
+          });
+        });
+      } else if (!Main.searchValue) {
+        this.searchList.style.display = "none";
+      }
     });
   }
 

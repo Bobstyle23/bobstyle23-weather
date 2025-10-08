@@ -9,7 +9,7 @@ function Dropdown(root) {
 }
 
 Dropdown.prototype = {
-  cacheDOM: function (root) {
+  cacheDOM(root) {
     this.root = root;
     this.button = root.querySelector(".select__button");
     this.dropdown = root.querySelector(".select__dropdown");
@@ -23,7 +23,7 @@ Dropdown.prototype = {
     this.type = root.dataset.type || "default";
   },
 
-  init: function () {
+  init() {
     this.selectedValue.textContent = this.defaultValue;
 
     if (this.type !== "units") {
@@ -56,7 +56,7 @@ Dropdown.prototype = {
     });
   },
 
-  toggle: function (open = null) {
+  toggle(open = null) {
     const isOpen =
       open !== null ? open : this.dropdown.classList.contains("hidden");
     this.dropdown.classList.toggle("hidden", !isOpen);
@@ -71,7 +71,7 @@ Dropdown.prototype = {
     }
   },
 
-  selectInitialUnits: function () {
+  selectInitialUnits() {
     this.options.forEach((option) => {
       if (option.dataset.unit === this.measureUnit) {
         option.classList.add("selected");
@@ -83,7 +83,7 @@ Dropdown.prototype = {
     });
   },
 
-  switchUnit: function () {
+  switchUnit() {
     this.measureUnit = this.measureUnit === "metrics" ? "imperial" : "metrics";
 
     this.switchUnitButton.textContent =
@@ -103,7 +103,7 @@ Dropdown.prototype = {
     });
   },
 
-  selectOption: function (option) {
+  selectOption(option) {
     if (this.type !== "units") {
       this.options.forEach((o) => o.classList.remove("selected"));
       option.classList.add("selected");
@@ -113,7 +113,7 @@ Dropdown.prototype = {
     return;
   },
 
-  updateFocus: function () {
+  updateFocus() {
     this.options.forEach((option, idx) => {
       option.setAttribute("tabindex", idx === this.focusedIndex ? "0" : "-1");
       if (idx === this.focusedIndex) option.focus();
@@ -121,7 +121,7 @@ Dropdown.prototype = {
   },
 
   // PERF: keyboard handlers
-  handleButtonKeydown: function (event) {
+  handleButtonKeydown(event) {
     if (event.key === "ArrowDown") {
       event.preventDefault();
       this.toggle(true);
@@ -130,7 +130,7 @@ Dropdown.prototype = {
     }
   },
 
-  handleDropdownKeydown: function (event) {
+  handleDropdownKeydown(event) {
     if (event.key === "ArrowDown") {
       event.preventDefault();
       this.focusedIndex = (this.focusedIndex + 1) % this.options.length;
