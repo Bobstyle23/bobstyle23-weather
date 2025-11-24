@@ -251,11 +251,7 @@ class Main {
           weatherCode: weatherData.hourly.weathercode[timeIndex],
           windSpeed: weatherData.hourly.windspeed_10m[timeIndex],
           cloudCover: weatherData.hourly.cloudcover[timeIndex],
-          uvIndex: weatherData.hourly.uv_index[timeIndex],
-          sunrise: weatherData.daily.sunrise[dayIndex],
-          sunset: weatherData.daily.sunset[dayIndex],
-          pressure: weatherData.hourly.pressure_msl[timeIndex],
-          visibility: weatherData.hourly.visibility[timeIndex],
+          // uvIndex: weatherData.hourly.uv_index[timeIndex],
         };
 
         const dayNames = Main.#dayNames(weatherData);
@@ -335,15 +331,10 @@ class Main {
         });
 
         const currentWeatherUnits = [
-          `${Main.#formatTime(currentWeather.sunrise)}`,
           `${currentWeather.apparentTemperature.toFixed(0)}&deg;`,
           `${currentWeather.humidity}%`,
           `${currentWeather.windSpeed} ${weatherData.hourly_units.windspeed_10m}`,
           `${currentWeather.precipitation} ${weatherData.hourly_units.precipitation}`,
-          `${Math.round(currentWeather.uvIndex * 1).toFixed()}`,
-          `${Number(currentWeather.pressure.toFixed(0)).toLocaleString("en-US")} ${weatherData.hourly_units.pressure_msl}`,
-          `${Math.floor(currentWeather.visibility / 1000)} km`,
-          `${Main.#formatTime(currentWeather.sunset)}`,
         ];
 
         this.currentDegree.innerHTML = `${currentWeather.temperature.toFixed(0)}&deg;`;
